@@ -1,0 +1,335 @@
+﻿<Window x:Class="HelloCompany.View.AddNaturalPerson"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HelloCompany.View"
+        xmlns:vm="clr-namespace:HelloCompany.ViewModel"
+        xmlns:custom="clr-namespace:HelloCompany.Core.Custom"
+        mc:Ignorable="d"
+        Title="Регистрация физического лица"
+        Height="800"
+        Width="650"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        ShowInTaskbar="False">
+
+    <Window.DataContext>
+        <vm:AddNaturalPersonVM />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ControlTemplate x:Key="validFailed">
+            <StackPanel Orientation="Vertical">
+                <Border BorderBrush="Red"
+                        BorderThickness="1.5">
+                    <AdornedElementPlaceholder />
+                </Border>
+                <TextBlock Foreground="DarkRed"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Text="Неверные данные!" />
+            </StackPanel>
+        </ControlTemplate>
+    </Window.Resources>
+
+    <Grid Margin="0 30 0 0"
+          Opacity=".7">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height=".3*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".25*" />
+            <ColumnDefinition />
+            <ColumnDefinition Width=".25*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.ColumnSpan="3"
+                   Text="РЕГИСТРАЦИЯ ФИЗ. ЛИЦА"
+                   VerticalAlignment="Center"
+                   TextAlignment="Center"
+                   FontWeight="Bold"
+                   FontSize="28" />
+
+        <Separator Grid.Column="1"
+                   Grid.Row="1"
+                   VerticalAlignment="Bottom"
+                   Margin="0 20 0 0"
+                   BorderBrush="LightGray"
+                   BorderThickness="3.5"
+                   Opacity="1" />
+
+        <Grid Grid.Column="1"
+              Grid.Row="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".8*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.Resources>
+
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Grid.Column"
+                            Value="1" />
+                    <Setter Property="VerticalAlignment"
+                            Value="Center" />
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Center" />
+                    <Setter Property="FontSize"
+                            Value="18" />
+                    <Setter Property="Validation.ErrorTemplate"
+                            Value="{StaticResource validFailed}" />
+                    <Setter Property="Margin"
+                            Value="10 0" />
+                </Style>
+
+                <Style TargetType="{x:Type Label}">
+                    <Setter Property="VerticalAlignment"
+                            Value="Center" />
+                    <Setter Property="HorizontalAlignment"
+                            Value="Center" />
+                    <Setter Property="FontSize"
+                            Value="18" />
+                    <Setter Property="FontWeight"
+                            Value="Bold" />
+                </Style>
+
+            </Grid.Resources>
+
+            <TextBox x:Name="sur"
+                     Text="{Binding Person.FullName.Surname}" />
+
+            <Label Target="{Binding ElementName=sur}">
+                <AccessText Text="_Фамилия*"
+                            TextWrapping="Wrap" />
+            </Label>
+
+            <TextBox x:Name="fname"
+                     Grid.Row="1"
+                     Text="{Binding Person.FullName.FirstName}" />
+
+            <Label Target="{Binding ElementName=fname}"
+                   Grid.Row="1">
+                <AccessText Text="_Имя*"
+                            TextWrapping="Wrap" />
+            </Label>
+
+            <TextBox x:Name="patr"
+                     Grid.Row="2"
+                     Text="{Binding Person.FullName.Patronymic}" />
+
+            <Label Target="{Binding ElementName=patr}"
+                   Grid.Row="2">
+                <AccessText Text="_Отчество*"
+                            TextWrapping="Wrap" />
+            </Label>
+
+            <TextBox x:Name="email"
+                     Grid.Row="3"
+                     Text="{Binding Person.Email, ValidatesOnDataErrors=True}">
+
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Setters>
+                            <Setter Property="Grid.Column"
+                                    Value="1" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Center" />
+                            <Setter Property="FontSize"
+                                    Value="18" />
+                            <Setter Property="Validation.ErrorTemplate"
+                                    Value="{StaticResource validFailed}" />
+                            <Setter Property="Margin"
+                                    Value="10 0" />
+                        </Style.Setters>
+
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError"
+                                     Value="true">
+                                <Setter Property="ToolTip"
+                                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <Label Target="{Binding ElementName=email}"
+                   Grid.Row="3">
+                <AccessText Text="_Электронная почта*"
+                            TextWrapping="Wrap" />
+            </Label>
+
+            <custom:MaskedTextBox x:Name="pdata"
+                                  Mask="Pasport"
+                                  Grid.Row="4"
+                                  Grid.Column="1"
+                                  Margin="10 0"
+                                  FontSize="18"
+                                  VerticalAlignment="Center"
+                                  VerticalContentAlignment="Center"
+                                  Text="{Binding Person.PasportData.FullData, ValidatesOnDataErrors=True}">
+
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Setters>
+                            <Setter Property="Grid.Column"
+                                    Value="1" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Center" />
+                            <Setter Property="FontSize"
+                                    Value="18" />
+                            <Setter Property="Validation.ErrorTemplate"
+                                    Value="{StaticResource validFailed}" />
+                            <Setter Property="Margin"
+                                    Value="10 0" />
+                        </Style.Setters>
+
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError"
+                                     Value="true">
+                                <Setter Property="ToolTip"
+                                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </custom:MaskedTextBox>
+
+            <Label Target="{Binding ElementName=pdata}"
+                   Grid.Row="4">
+                <AccessText Text="_Паспортные данные*"
+                            TextWrapping="Wrap" />
+            </Label>
+
+            <TextBox x:Name="addr"
+                     Grid.Row="5"
+                     Text="{Binding Person.Address}" />
+
+            <Label Target="{Binding ElementName=addr}"
+                   Grid.Row="5">
+                <AccessText Text="_Адрес*"
+                            TextWrapping="Wrap" />
+            </Label>
+
+            <DatePicker x:Name="bDate"
+                        Grid.Column="1"
+                        Grid.Row="6"
+                        Margin="10 0"
+                        FontSize="18"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Cursor="Hand"
+                        FirstDayOfWeek="Monday"
+                        IsTodayHighlighted="False"
+                        DisplayDateStart="1/01/1923"
+                        DisplayDateEnd="{Binding Person.BirthDate, Mode=OneTime}"
+                        SelectedDateFormat="Long"
+                        SelectedDate="{Binding Person.BirthDate}" />
+
+            <Label Target="{Binding ElementName=bDate}"
+                   Grid.Row="6">
+                <AccessText Text="_Дата рождения*"
+                            TextWrapping="Wrap" />
+            </Label>
+
+            <TextBox x:Name="passw"
+                     Grid.Row="7"
+                     Text="{Binding Person.Password}" />
+
+            <Label Target="{Binding ElementName=passw}"
+                   Grid.Row="7">
+                <AccessText Text="_Пароль*"
+                            TextWrapping="Wrap" />
+            </Label>
+
+            <TextBox x:Name="ccode"
+                     Grid.Row="8"
+                     Text="{Binding Person.Code, ValidatesOnDataErrors=True}">
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Setters>
+                            <Setter Property="Grid.Column"
+                                    Value="1" />
+                            <Setter Property="VerticalAlignment"
+                                    Value="Center" />
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Center" />
+                            <Setter Property="FontSize"
+                                    Value="18" />
+                            <Setter Property="Validation.ErrorTemplate"
+                                    Value="{StaticResource validFailed}" />
+                            <Setter Property="Margin"
+                                    Value="10 0" />
+                        </Style.Setters>
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError"
+                                     Value="true">
+                                <Setter Property="ToolTip"
+                                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <Label Target="{Binding ElementName=ccode}"
+                   Grid.Row="8">
+                <AccessText Text="_Код клиента*"
+                            TextWrapping="Wrap" />
+            </Label>
+        </Grid>
+
+        <DockPanel LastChildFill="True"
+                   Grid.Row="3"
+                   Grid.Column="1">
+
+            <StackPanel DockPanel.Dock="Bottom">
+                <TextBlock Opacity=".8"
+                           Margin="0 0 0 20"
+                           Text="Поля отмеченные &quot; * &quot; обязательны для заполнения"
+                           FontSize="14"
+                           HorizontalAlignment="Center" />
+            </StackPanel>
+
+            <Button Opacity="1"
+                    Margin="20 20 20 10"
+                    IsDefault="True"
+                    FontSize="28"
+                    Cursor="Hand"
+                    Foreground="White"
+                    Background="#2794f3"
+                    Click="Button_Click"
+                    Command="{Binding AddNaturalPersonCommand}">
+
+                <TextBlock Text="Зарегестрировать"
+                           FontWeight="Bold" />
+            </Button>
+        </DockPanel>
+    </Grid>
+</Window>
