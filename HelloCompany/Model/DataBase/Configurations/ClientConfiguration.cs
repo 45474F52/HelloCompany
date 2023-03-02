@@ -11,7 +11,6 @@ namespace HelloCompany.Model.DataBase.Configurations
 
             HasKey(c => c.Code);
 
-            //Unique not invalid
             //HasIndex(c => c.Email).IsUnique();
 
             Property(c => c.Code).HasMaxLength(8).IsUnicode();
